@@ -207,7 +207,13 @@ std::vector<std::vector<cv::Point2f>> QuadrilateralDetector::detectQuadrilateral
 
                                                 try
 						{
-							auto oredere
+							auto orderedCorners = orderContour(corners); 
+							detectedQuadrilaterals.push_back(orderedCorners);
+						}
+						catch (const std::invalid_argument& e)
+						{
+							// Use original corners if ordering fails
+							detectedQuadrilaterals.push_back(corners);
 						}
 					
 					}
@@ -215,4 +221,40 @@ std::vector<std::vector<cv::Point2f>> QuadrilateralDetector::detectQuadrilateral
 			}
 		}
 	}
+	return detectedQuadrilaterals;
 }
+
+bool QuadrilateralDetector::drawResults(const std::string& inputPath, const std::string& outputPath)
+{
+	try
+	{
+		cv::Mat image = readImage(inputPath);
+		QuadrilateralDetector detector;
+		auto quads = detector.detectQuadrilaterals(image);
+
+		std::cout<<"Found "<< quads.size() <<"quadrilaterals "<<std::endl;
+
+		cv::Mat resultImage = image.clone();
+		for (const auto& quad : quads)
+		{
+			std::vector<cv::Point> intQuad;
+			for (const auto& point: quad)
+			{
+				intQuad.push_back(cv::Point(static_cast<int>(point.x), static_cast<int>(point.y)));
+			}
+			cv::polylines(resultImage, intQuad, true, cv::Scalar(0,255,0), 2);
+		}
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
