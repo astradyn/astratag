@@ -1,0 +1,3 @@
+/home/ravikt/repositories/astratag/build/CMakeFiles/quadrilateral_detector.dir
+/home/ravikt/repositories/astratag/build/CMakeFiles/edit_cache.dir
+/home/ravikt/repositories/astratag/build/CMakeFiles/rebuild_cache.dir
