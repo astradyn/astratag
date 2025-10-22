@@ -39,3 +39,12 @@
 
 # debug information files
 *.dwo
+
+# Build directories
+build/
+
+# Test data (not version controlled)
+test_images/
+
+# Results output
+results/
