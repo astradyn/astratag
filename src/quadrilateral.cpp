@@ -244,9 +244,28 @@ bool QuadrilateralDetector::drawResults(const std::string& inputPath, const std:
 			}
 			cv::polylines(resultImage, intQuad, true, cv::Scalar(0,255,0), 2);
 		}
+
+		if (!outputPath.empty())
+		{
+			cv::imwrite(outputPath, resultImage);
+			std::cout<<"Results saved to "<<outputPath<<std::endl;
+		}
+		return !quads.empty();
+
+	}
+
+	catch (const std::exception& e)
+	{
+		std::cerr<<"Error processing image: "<<e.what()<<std::endl;
+		return false;
 	}
 }
 
+
+void processImageBatch(const std::string& inputFolder, const std::string& outputFolder)
+{
+
+}
 
 
 
