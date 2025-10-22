@@ -48,3 +48,7 @@ test_images/
 
 # Results output
 results/
+
+# Generated/temporary image files
+binary.png
+enhanced.png
