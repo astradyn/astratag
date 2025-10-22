@@ -1,4 +1,4 @@
-#include <"quadrilateral.hpp">
+#include "quadrilateral.hpp"
 #include <iostream>
 #include <cmath>
 #include <algorithm>
@@ -21,7 +21,7 @@ cv::Mat QuadrilateralDetector::readImage(const std::string& imagePath)
 cv::Mat QuadrilateralDetector::preprocessImage(const cv::Mat& image)
 {
 	cv::Mat gray;
-	cv::cvtColor(image, gray, cv::COLORBGR2GRAY);
+	cv::cvtColor(image, gray, cv::COLOR_BGR2GRAY);
 
 	// Apply CLAHE
 	cv::Ptr<cv::CLAHE> clahe = cv::createCLAHE(2.0, cv::Size(8,8));
@@ -73,21 +73,21 @@ std::vector<std::vector<cv::Point>> QuadrilateralDetector::findContours(const cv
 	return filteredContours;
 }
 
-std::vector<cv::Vec4i> QuadrilateralDetector::detectLines(const cv::Mat& contour Img)
+std::vector<cv::Vec4i> QuadrilateralDetector::detectLines(const cv::Mat& contourImg)
 {
 	std::vector<cv::Vec4i> lines;
 	cv::HoughLinesP(contourImg, lines, 1, CV_PI/180, 20, 10, 5);
 	return lines;
 }
 
-std::vector<CartesianLine> QuadrilateralDetector::convertLinesToCartesian(const std::vector<cv::Vec4i>& lines);
+std::vector<CartesianLine> QuadrilateralDetector::convertLinesToCartesian(const std::vector<cv::Vec4i>& lines)
 {
 	std::vector<CartesianLine> cartesianLines;
 
 	// Consider upto eight lines
 	size_t maxLines = std::min(lines.size(), size_t(8));
         
-	for (size_t i = 0, i<maxLines; ++i)
+	for (size_t i = 0; i < maxLines; ++i)
 	{
 		CartesianLine line;
 		line.p1 = cv::Point2f(lines[i][0], lines[i][1]);
@@ -98,7 +98,7 @@ std::vector<CartesianLine> QuadrilateralDetector::convertLinesToCartesian(const 
 	return cartesianLines;
 }
 
-std::vector<std::pair<int,int>> QuadrilateralDetector::findParallelPairs(const std::vector<CartesianLins>& cartesianLines)
+std::vector<std::pair<int,int>> QuadrilateralDetector::findParallelPairs(const std::vector<CartesianLine>& cartesianLines)
 {
 	std::vector<std::pair<int, int>> parallelPairs;
 	for (size_t i= 0; i<cartesianLines.size(); ++i)
@@ -164,7 +164,7 @@ std::vector<std::vector<cv::Point2f>> QuadrilateralDetector::detectQuadrilateral
 	cv::imwrite("binary.png", binary);
 
 	auto contours = findContours(binary);
-	std::vector<std::vector<cv::Point2f>> detectQuadrilaterals;
+	std::vector<std::vector<cv::Point2f>> detectedQuadrilaterals;
 
 	for (const auto& contour : contours)
 	{
@@ -264,16 +264,34 @@ bool QuadrilateralDetector::drawResults(const std::string& inputPath, const std:
 
 void processImageBatch(const std::string& inputFolder, const std::string& outputFolder)
 {
+	if(!fs::exists(outputFolder))
+	{
+		fs::create_directories(outputFolder);
+	}
 
+	int successfulDetections = 0;
+	int totalImages          = 0;
+
+	for (const auto& entry : fs::directory_iterator(inputFolder))
+	{
+		if (entry.is_regular_file())
+		{
+			std::string extension = entry.path().extension().string();
+			std::transform(extension.begin(), extension.end(), extension.begin(), ::tolower);
+			if (extension == ".png" || extension == ".jpg" || extension == ".jpeg")
+			{
+				totalImages++;
+				std::string inputPath = entry.path().string();
+				std::string outputPath= fs::path(outputFolder)/("output_" + entry.path().filename().string());
+
+				if (QuadrilateralDetector::drawResults(inputPath, outputPath))
+				{
+					successfulDetections++;
+				}
+			}
+		}
+	}
+
+	std::cout<<"\nSummary: Found quadrilaterals in "<<successfulDetections
+		<<" out of "<< totalImages<< " images" <<std::endl;
 }
-
-
-
-
-
-
-
-
-
-
-
