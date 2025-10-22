@@ -17,14 +17,14 @@ To test the marker, a space like ligthing condition was created. A cube shaped b
 
 AstraTag markers can also be used in robotics application in terrestial and underwater environments. 
 
-## Requirements
+### Requirements
 
 - **C++17** or later
 - **OpenCV 4.x** (configured in CMakeLists.txt)
 - **CMake 3.16** or later
 - **Build tools** (make, gcc/clang)
 
-## Building the Project
+### Building the Project
 
 1. **Clone the repository:**
    ```bash
@@ -46,26 +46,26 @@ AstraTag markers can also be used in robotics application in terrestial and unde
    make
    ```
 
-## Running the Detector
+### Running the Detector
 
-### Option 1: Using the convenience script (Recommended)
+#### Option 1: Using the convenience script (Recommended)
 ```bash
 ./scripts/run_detector.sh
 ```
 
-### Option 2: Manual execution
+#### Option 2: Manual execution
 ```bash
 # Run from the project root directory
 ./build/quadrilateral_detector
 ```
 
-## Input and Output
+#### Input and Output
 
 - **Input**: Place test images in the `test_images/` folder
 - **Output**: Processed results will be saved in the `results/` folder
 - **Supported formats**: PNG, JPG, JPEG
 
-## Project Structure
+### Project Structure
 
 ```
 astratag/
@@ -82,6 +82,6 @@ astratag/
 └── build/                 # Build artifacts (not in version control)
 ```
 
-## Sample Usage
+### Sample Usage
 
 The detector will automatically process all supported image files in the `test_images/` directory and output the results with detected quadrilaterals highlighted in green. 
