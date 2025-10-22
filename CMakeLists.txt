@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Method 1: Set OpenCV_DIR to your OpenCV root folder
-set(OpenCV_DIR "/home/ravikt/dev/opencv5")
+set(OpenCV_DIR "path/to/opencv")
 # Examples:
 # Windows: "C:/opencv"
 # Linux: "/home/username/opencv"
