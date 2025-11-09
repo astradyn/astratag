@@ -9,11 +9,12 @@ This repository contains the implementation of multi-range, recursive fiducial m
     <img src="sample/marker_3.png" width="200">
 </div>
 
-To test the marker, a space like ligthing condition was created. A cube shaped box was used as a mock-up spacecraft. The images below demonstrates a sample result. The setup is placed on turntable to simulate out-of-place rotation. 
+To test the marker, a space like ligthing condition was created a pair of mock-up spacecrafts were used as a target. The images below demonstrates a sample result. The setup is placed on turntable to simulate out-of-plane rotation. 
 
-<img src="test/enhanced.png" width="600">
-
-<img src="test/result.png" width="600">
+<div style="display:flex; gap:12px; justify-content:center; align-items:flex-start; flex-wrap:wrap;">
+   <img src="test/frame_0001.png" alt="frame 0001" style="max-width:48%; height:auto;">
+   <img src="test/frame_0103.png" alt="frame 0103" style="max-width:48%; height:auto;">
+</div>
 
 AstraTag markers can also be used in robotics application in terrestial and underwater environments. 
 
@@ -69,17 +70,14 @@ AstraTag markers can also be used in robotics application in terrestial and unde
 
 ```
 astratag/
-├── src/                    # Source code
-│   ├── main.cpp           # Main application
-│   └── quadrilateral.cpp  # Detection implementation
-├── include/               # Header files
-│   └── quadrilateral.hpp  # Class definitions
-├── sample/                # Sample marker images (20 markers)
-├── test_images/           # Test input images (not in version control)
-├── results/               # Output directory (not in version control)
-├── scripts/               # Utility scripts
-│   └── run_detector.sh    # Convenience script to run detector
-└── build/                 # Build artifacts (not in version control)
+├── src/                    
+│   ├── main.cpp           
+│   └── quadrilateral.cpp  
+├── include/               
+│   └── quadrilateral.hpp  
+├── sample/                
+├── scripts/              
+│   └── run_detector.sh    
 ```
 
 ### Sample Usage
