@@ -11,9 +11,10 @@ This repository contains the implementation of multi-range, recursive fiducial m
 
 To test the marker, a space like ligthing condition was created a pair of mock-up spacecrafts were used as a target. The images below demonstrates a sample result. The setup is placed on turntable to simulate out-of-plane rotation. 
 
-<img src="test/frame_0001.png" width="600">
-
-<img src="test/framw_0103.png" width="600">
+<div style="display:flex; gap:12px; justify-content:center; align-items:flex-start; flex-wrap:wrap;">
+   <img src="test/frame_0001.png" alt="frame 0001" style="max-width:48%; height:auto;">
+   <img src="test/frame_0103.png" alt="frame 0103" style="max-width:48%; height:auto;">
+</div>
 
 AstraTag markers can also be used in robotics application in terrestial and underwater environments. 
 
