@@ -1,0 +1,16 @@
+// Auto-generated file - DO NOT EDIT
+// Generated from data files by CMake
+
+#include <string>
+
+namespace astratag {
+namespace embedded {
+
+// Dictionary data (from data/new_dictionary.json)
+const char* DICTIONARY_JSON = R"(@DICTIONARY_CONTENT@)";
+
+// Keypoints data (from data/keypoints.txt)
+const char* KEYPOINTS_TXT = R"(@KEYPOINTS_CONTENT@)";
+
+} // namespace embedded
+} // namespace astratag
