@@ -50,6 +50,7 @@ make -j$(nproc)
   - `data/new_dictionary.json` : marker dictionary used by the detector
   - `config/camera_example.json` : camera intrinsics used for pose visualization
 
+Project Structure
 ```
 astratag/
 ├── CMakeLists.txt                 
@@ -62,7 +63,7 @@ astratag/
 │   └── main.cpp                    
 ├── examples/
 │   └── detect_tags.cpp            
-├── data/                           (new_dictionary.json, keypoints.txt)
+├── data/                           
 ├── config/                        
 ├── sample/                        
 ├── scripts/                                                
