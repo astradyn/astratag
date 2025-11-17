@@ -9,77 +9,67 @@ This repository contains the implementation of multi-range, recursive fiducial m
     <img src="sample/marker_3.png" width="200">
 </div>
 
-To test the marker, a space like ligthing condition was created a pair of mock-up spacecrafts were used as a target. The images below demonstrates a sample result. The setup is placed on turntable to simulate out-of-plane rotation. 
+To test the marker, a space-like environment was created using a pair of mock-up spacecraft. The mock-ups, inspired by the Aditya-L1 spacecraft and the Indian Space Station module BAS-01, were used as targets. The images below demonstrate a sample result. The setup was placed on a turntable to simulate out-of-plane rotation.
 
-<div style="display:flex; gap:12px; justify-content:center; align-items:flex-start; flex-wrap:wrap;">
-   <img src="test/frame_0001.png" alt="frame 0001" style="max-width:48%; height:auto;">
-   <img src="test/frame_0103.png" alt="frame 0103" style="max-width:48%; height:auto;">
+<div style="display:flex; flex-direction:row; justify-content:center; gap:12px; align-items:flex-start; flex-wrap:nowrap;">
+   <img src="test/frame_0001.png" alt="frame 0001" style="width:48%; height:auto; display:block; object-fit:contain;">
+   <img src="test/frame_0103.png" alt="frame 0103" style="width:48%; height:auto; display:block; object-fit:contain;">
 </div>
 
 AstraTag markers can also be used in robotics application in terrestial and underwater environments. 
 
 ### Requirements
 
-- **C++17** or later
-- **OpenCV 4.x** (configured in CMakeLists.txt)
-- **CMake 3.16** or later
-- **Build tools** (make, gcc/clang)
+- C++17 or later
+- OpenCV 4.x (required by CMake)
+- CMake 3.16 or later
+- A standard build toolchain (gcc/clang, make)
 
-### Building the Project
+Quick build (recommended)
+1. Clone the repository and create a build directory:
 
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/ravikt/astratag.git
-   cd astratag
-   ```
-
-2. **Update OpenCV path** (if needed):
-   Edit `CMakeLists.txt` and update the OpenCV_DIR path to match your OpenCV installation:
-   ```cmake
-   set(OpenCV_DIR "/path/to/your/opencv")
-   ```
-
-3. **Create build directory and compile:**
-   ```bash
-   mkdir build
-   cd build
-   cmake ..
-   make
-   ```
-
-### Running the Detector
-
-#### Option 1: Using the convenience script (Recommended)
 ```bash
-./scripts/run_detector.sh
+git clone https://github.com/ravikt/astratag.git
+cd astratag
+mkdir build && cd build
+cmake ..
+make -j$(nproc)
 ```
 
-#### Option 2: Manual execution
 ```bash
-# Run from the project root directory
-./build/quadrilateral_detector
+# from project root
+./build/astratag_detect
+
+# or from build/
+./astratag_detect
 ```
 
-#### Input and Output
+- The example expects a few folders/files by default (see `examples/detect_tags.cpp`):
+  - `astratag_data/` : input images to process (create or replace with your own)
+  - `results/`       : output folder where processed frames are written
+  - `data/new_dictionary.json` : marker dictionary used by the detector
+  - `config/camera_example.json` : camera intrinsics used for pose visualization
 
-- **Input**: Place test images in the `test_images/` folder
-- **Output**: Processed results will be saved in the `results/` folder
-- **Supported formats**: PNG, JPG, JPEG
-
-### Project Structure
-
+Project Structure
 ```
 astratag/
-├── src/                    
-│   ├── main.cpp           
-│   └── quadrilateral.cpp  
-├── include/               
-│   └── quadrilateral.hpp  
-├── sample/                
-├── scripts/              
-│   └── run_detector.sh    
+├── CMakeLists.txt                 
+├── include/                       
+├── src/                           
+│   ├── quadrilateral.cpp
+│   ├── detector.cpp
+│   ├── signature.cpp
+│   ├── visualization.cpp
+│   └── main.cpp                    
+├── examples/
+│   └── detect_tags.cpp            
+├── data/                           
+├── config/                        
+├── sample/                        
+├── scripts/                                                
 ```
 
-### Sample Usage
 
-The detector will automatically process all supported image files in the `test_images/` directory and output the results with detected quadrilaterals highlighted in green. 
+### License
+See `LICENSE` in the repository root for license terms.
+
