@@ -11,9 +11,9 @@ This repository contains the implementation of multi-range, recursive fiducial m
 
 To test the marker, a space-like environment was created using a pair of mock-up spacecraft. The mock-ups, inspired by the Aditya-L1 spacecraft and the Indian Space Station module BAS-01, were used as targets. The images below demonstrate a sample result. The setup was placed on a turntable to simulate out-of-plane rotation.
 
-<div style="display:flex; justify-content:center; gap:12px; align-items:flex-start; flex-wrap:nowrap;">
-   <img src="test/frame_0001.png" alt="frame 0001" style="max-width:48%; height:auto;">
-   <img src="test/frame_0103.png" alt="frame 0103" style="max-width:48%; height:auto;">
+<div style="display:flex; flex-direction:row; justify-content:center; gap:12px; align-items:flex-start; flex-wrap:nowrap;">
+   <img src="test/frame_0001.png" alt="frame 0001" style="width:48%; height:auto; display:block; object-fit:contain;">
+   <img src="test/frame_0103.png" alt="frame 0103" style="width:48%; height:auto; display:block; object-fit:contain;">
 </div>
 
 AstraTag markers can also be used in robotics application in terrestial and underwater environments. 
@@ -69,6 +69,6 @@ astratag/
 ```
 
 
-License
-- See `LICENSE` in the repository root for license terms.
+### License
+See `LICENSE` in the repository root for license terms.
 
