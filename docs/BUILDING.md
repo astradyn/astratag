@@ -6,7 +6,7 @@ Quick start guide for building and integrating the AstraTag detection library.
 
 ```bash
 git clone <repository-url>
-cd astratag-nightly
+cd astratag
 mkdir build && cd build
 cmake ..
 make -j4
@@ -90,7 +90,7 @@ target_link_libraries(your_app PRIVATE astratag_lib)
 ### Option 3: Install System-Wide
 
 ```bash
-cd astratag-nightly/build
+cd astratag/build
 sudo make install  # (after adding install() commands to CMakeLists.txt)
 ```
 
@@ -260,13 +260,6 @@ your_app/
 
 See [docs/FILE_ORGANIZATION.md](FILE_ORGANIZATION.md) for detailed explanation of file organization.
 
-## Next Steps
-
-- Read the [API Documentation](docs/API.md) for detailed function reference
-- Check [examples/](examples/) for more usage patterns
-- See [README.md](README.md) for algorithm overview
-- Calibrate your own camera using OpenCV calibration tools
-- Create custom marker dictionaries for your application
 
 ## Support
 
