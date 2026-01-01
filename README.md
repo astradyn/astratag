@@ -1,5 +1,5 @@
 # AstraTag
-### Multi-Range Fiducial Marker for Spacecraft Rendezvous, Proximity Operations and Docking
+#### Multi-Range Fiducial Marker for Spacecraft Rendezvous, Proximity Operations and Docking
 
 This repository contains the implementation of multi-range, recursive fiducial marker AstraTag. The marker template is derived from square shaped Spidron. The marker is designed for in-orbit operations around cooperative targets. The objective of introducing recurisve feature is to make it suitable for conducting rendezvous and proximity operation. Its three layers provide robustness against a partial occlusion. Below are some of the sample markers. 
 
@@ -18,7 +18,7 @@ To test the marker, a space-like environment was created using a pair of mock-up
 
 AstraTag markers can also be used in robotics application in terrestial and underwater environments. 
 
-### Requirements
+#### Requirements
 
 - C++17 or later
 - OpenCV 4.x (required by CMake)
@@ -44,32 +44,6 @@ make -j$(nproc)
 ./astratag_detect
 ```
 
-- The example expects a few folders/files by default (see `examples/detect_tags.cpp`):
-  - `astratag_data/` : input images to process (create or replace with your own)
-  - `results/`       : output folder where processed frames are written
-  - `data/new_dictionary.json` : marker dictionary used by the detector
-  - `config/camera_example.json` : camera intrinsics used for pose visualization
-
-Project Structure
-```
-astratag/
-├── CMakeLists.txt                 
-├── include/                       
-├── src/                           
-│   ├── quadrilateral.cpp
-│   ├── detector.cpp
-│   ├── signature.cpp
-│   ├── visualization.cpp
-│   └── main.cpp                    
-├── examples/
-│   └── detect_tags.cpp            
-├── data/                           
-├── config/                        
-├── sample/                        
-├── scripts/                                                
-```
-
-
-### License
+#### License
 See `LICENSE` in the repository root for license terms.
 
