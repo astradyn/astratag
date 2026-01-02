@@ -1,3 +1,6 @@
+// Copyright (c) Astradyn Systems LLP.
+// SPDX-License-Identifier: Apache-2.0
+
 #include "quadrilateral.hpp"
 #include <iostream>
 
@@ -6,7 +9,7 @@ int main() {
         const std::string inputFolder = "test_images";
         const std::string outputFolder = "results";
         
-        processImageBatch(inputFolder, outputFolder);
+        processImagesBatch(inputFolder, outputFolder);
         
     } catch (const std::exception& e) {
         std::cerr << "Error: " << e.what() << std::endl;

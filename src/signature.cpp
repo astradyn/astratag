@@ -1,3 +1,6 @@
+// Copyright (c) Astradyn Systems LLP.
+// SPDX-License-Identifier: Apache-2.0
+
 #include "signature.hpp"
 #include <fstream>
 #include <sstream>

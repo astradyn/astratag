@@ -5,11 +5,16 @@ project(AstraTagDetector)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Option to embed data files
+# Export compile commands for clang-tidy
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+# Options
 option(ASTRATAG_EMBED_DATA "Embed dictionary and keypoints into library" OFF)
+option(ASTRATAG_ENABLE_CLANG_TIDY "Enable clang-tidy during build" OFF)
+option(ASTRATAG_WARNINGS_AS_ERRORS "Treat warnings as errors" OFF)
 
 # Method 1: Set OpenCV_DIR to your OpenCV root folder
-set(OpenCV_DIR "/home/ravikt/dev/opencv5")
+set(OpenCV_DIR "path/to/your/opencv/build")  # <-- Change this path accordingly
 # Examples:
 # Windows: "C:/opencv"
 # Linux: "/home/username/opencv"
@@ -77,10 +82,39 @@ set_target_properties(astratag_detect PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
 )
 
-# Enable warnings
-target_compile_options(astratag_lib PRIVATE
-    -Wall -Wextra -Wpedantic
+# Enhanced compiler warnings
+set(ASTRATAG_WARNING_FLAGS
+    -Wall
+    -Wextra
+    -Wpedantic
+    -Wshadow
+    -Wnon-virtual-dtor
+    -Wold-style-cast
+    -Wcast-align
+    -Wunused
+    -Woverloaded-virtual
+    -Wconversion
+    -Wsign-conversion
+    -Wformat=2
 )
+
+if(ASTRATAG_WARNINGS_AS_ERRORS)
+    list(APPEND ASTRATAG_WARNING_FLAGS -Werror)
+endif()
+
+target_compile_options(astratag_lib PRIVATE ${ASTRATAG_WARNING_FLAGS})
+target_compile_options(astratag_detect PRIVATE ${ASTRATAG_WARNING_FLAGS})
+
+# Static analysis integration
+if(ASTRATAG_ENABLE_CLANG_TIDY)
+    find_program(CLANG_TIDY_EXE NAMES clang-tidy)
+    if(CLANG_TIDY_EXE)
+        message(STATUS "clang-tidy found: ${CLANG_TIDY_EXE}")
+        set(CMAKE_CXX_CLANG_TIDY "${CLANG_TIDY_EXE};--config-file=${CMAKE_SOURCE_DIR}/.clang-tidy")
+    else()
+        message(WARNING "clang-tidy not found!")
+    endif()
+endif()
 
 message(STATUS "OpenCV library status:")
 message(STATUS "    version: ${OpenCV_VERSION}")

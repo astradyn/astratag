@@ -1,3 +1,6 @@
+// Copyright (c) Astradyn Systems LLP.
+// SPDX-License-Identifier: Apache-2.0
+
 #ifndef ASTRATAG_DETECTOR_HPP
 #define ASTRATAG_DETECTOR_HPP
 
