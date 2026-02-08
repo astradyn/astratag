@@ -13,13 +13,8 @@ option(ASTRATAG_EMBED_DATA "Embed dictionary and keypoints into library" OFF)
 option(ASTRATAG_ENABLE_CLANG_TIDY "Enable clang-tidy during build" OFF)
 option(ASTRATAG_WARNINGS_AS_ERRORS "Treat warnings as errors" OFF)
 
-# Method 1: Set OpenCV_DIR to your OpenCV root folder
-set(OpenCV_DIR "path/to/your/opencv/build")  # <-- Change this path accordingly
-# Examples:
-# Windows: "C:/opencv"
-# Linux: "/home/username/opencv"
-# Mac: "/usr/local/opt/opencv"
-
+# Set OpenCV_DIR at configure time if not installed system-wide:
+#   cmake -DOpenCV_DIR=/path/to/opencv/lib/cmake/opencv4 ..
 find_package(OpenCV REQUIRED)
 
 # Include directories
@@ -67,7 +62,7 @@ target_include_directories(astratag_lib PUBLIC
     ${CMAKE_SOURCE_DIR}/include
     ${OpenCV_INCLUDE_DIRS}
 )
-target_link_libraries(astratag_lib PUBLIC 
+target_link_libraries(astratag_lib PUBLIC
     ${OpenCV_LIBS}
 )
 

@@ -89,7 +89,7 @@ DetectionResult detect_tag(const cv::Mat& image,
         // Extract signature from this candidate
         std::string detected_sig;
         try {
-            detected_sig = get_contour_bits(image, candidate, 700, "keypoints.txt");
+            detected_sig = get_contour_bits(image, candidate, 700, "data/keypoints.txt");
         } catch (const std::exception& e) {
             std::cerr << "Error extracting signature from candidate " << cant_num 
                       << ": " << e.what() << std::endl;
@@ -100,14 +100,14 @@ DetectionResult detect_tag(const cv::Mat& image,
         for (const auto& dict_entry : tag_dictionary) {
             int marker_id = dict_entry.first;
             const MarkerData& marker_data = dict_entry.second;
-            
+
             // Check all 4 orientations
             for (const auto& orientation_entry : marker_data.orientations) {
                 const MarkerOrientation& orientation_data = orientation_entry.second;
-                
+
                 // Calculate Hamming distance
                 int distance = hamming_distance(detected_sig, orientation_data.signature);
-                
+
                 // Check if match is within threshold
                 if (distance <= allowed_misses) {
                     // Store detection result
@@ -115,13 +115,13 @@ DetectionResult detect_tag(const cv::Mat& image,
                     result.indices.push_back(marker_id);
                     result.world_locs.push_back(orientation_data.world_points);
                     result.count++;
-                    
+
                     // Break after first match for this candidate
                     goto next_candidate;
                 }
             }
         }
-        
+
         next_candidate:
         continue;
     }

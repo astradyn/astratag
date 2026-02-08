@@ -14,7 +14,7 @@ using namespace astratag;
 int main(int argc, char** argv) {
     try {
         // Configuration
-        const std::string test_folder = "astratag_data";
+        const std::string test_folder = "examples/astratag_data";
         const std::string output_folder = "results";
         const std::string dict_path = "data/new_dictionary.json";
         const std::string intrinsics_path = "config/camera_example.json";
