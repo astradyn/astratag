@@ -1,5 +1,7 @@
 # AstraTag
-#### Multi-Range Fiducial Marker for In-Orbit Robotics
+#### Multi-Range Fiducial Marker for Spacecraft Rendezvous, Proximity Operations and Docking
+
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.18524681.svg)](https://doi.org/10.5281/zenodo.18524681)
 
 This repository contains the implementation of multi-range, recursive fiducial marker AstraTag. The marker template is derived from square shaped Spidron. The marker is designed for in-orbit operations around cooperative targets. The objective of introducing recurisve feature is to make it suitable for conducting rendezvous and proximity operation. Its three layers provide robustness against a partial occlusion. Below are some of the sample markers. 
 
@@ -42,6 +44,21 @@ make -j$(nproc)
 
 # or from build/
 ./astratag_detect
+```
+
+#### Citation
+
+If you use AstraTag in your work, please cite it:
+
+```bibtex
+@software{astratag,
+  title = {AstraTag: Multi-Range Fiducial Marker for Spacecraft RPOD},
+  author = {Astradyn Systems LLP},
+  year = {2026},
+  url = {https://github.com/astradyn/astratag},
+  doi = {10.5281/zenodo.18524681},
+  license = {Apache-2.0}
+}
 ```
 
 #### License

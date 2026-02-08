@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+title: "AstraTag: Multi-Range Fiducial Marker for Spacecraft RPOD"
+message: "If you use this software, please cite it as below."
+type: software
+authors:
+  - name: "Astradyn Systems LLP"
+url: "https://github.com/astradyn/astratag"
+repository-code: "https://github.com/astradyn/astratag"
+doi: "10.5281/zenodo.18524681"
+date-released: "2026-02-08"
+license: Apache-2.0
+keywords:
+  - fiducial-marker
+  - pose-estimation
+  - spacecraft
+  - rpod
+  - proximity-operations
