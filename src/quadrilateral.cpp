@@ -31,7 +31,6 @@ cv::Mat QuadrilateralDetector::preprocessImage(const cv::Mat& image)
 	cv::Mat enhanced;
 	clahe->apply(gray, enhanced);
 
-	cv::imwrite("enhanced.png", enhanced);
 	return enhanced;
 }
 
@@ -132,39 +131,36 @@ std::vector<cv::Point2f> QuadrilateralDetector::orderContour(const std::vector<c
 	{
 		throw std::invalid_argument("Contour must have exactly 4 points");
 	}
-	std::vector<cv::Point2f> ordered = contour;
 
-	// Calculate center
-	float cx = 0, cy = 0;
-	for (const auto& point : ordered)
-	{
-		cx += point.x;
-		cy += point.y;
-	}
-	cx /= 4.0f;
-	cy /= 4.0f;
+	// Order corners as: top-left, top-right, bottom-right, bottom-left
+	// Top-left has smallest sum (x+y), bottom-right has largest sum
+	// Top-right has smallest difference (y-x), bottom-left has largest difference
+	std::vector<cv::Point2f> ordered(4);
 
-	// If first corner is top-left, swap diagonal
-	if (ordered[0].x <= cx && ordered[0].y <= cy)
+	std::vector<float> sums(4), diffs(4);
+	for (int i = 0; i < 4; ++i)
 	{
-		std::swap(ordered[1], ordered[3]);
+		sums[i] = contour[i].x + contour[i].y;
+		diffs[i] = contour[i].y - contour[i].x;
 	}
-	else
-	{
-		std::swap(ordered[0], ordered[1]);
-		std::swap(ordered[2], ordered[3]);
-	}
+
+	auto min_sum = std::min_element(sums.begin(), sums.end());
+	auto max_sum = std::max_element(sums.begin(), sums.end());
+	auto min_diff = std::min_element(diffs.begin(), diffs.end());
+	auto max_diff = std::max_element(diffs.begin(), diffs.end());
+
+	ordered[0] = contour[std::distance(sums.begin(), min_sum)];   // top-left
+	ordered[1] = contour[std::distance(diffs.begin(), min_diff)]; // top-right
+	ordered[2] = contour[std::distance(sums.begin(), max_sum)];   // bottom-right
+	ordered[3] = contour[std::distance(diffs.begin(), max_diff)]; // bottom-left
 
 	return ordered;
 }
 
 std::vector<std::vector<cv::Point2f>> QuadrilateralDetector::detectQuadrilaterals(const cv::Mat& image)
 {
-	cv::Mat output = image.clone();
 	cv::Mat gray   = preprocessImage(image);
 	cv::Mat binary = applyAdaptiveThreshold(gray);
-
-	cv::imwrite("binary.png", binary);
 
 	auto contours = findContours(binary);
 	std::vector<std::vector<cv::Point2f>> detectedQuadrilaterals;

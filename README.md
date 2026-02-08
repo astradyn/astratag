@@ -27,8 +27,9 @@ AstraTag markers can also be used in robotics application in terrestial and unde
 - CMake 3.16 or later
 - A standard build toolchain (gcc/clang, make)
 
-Quick build (recommended)
-1. Clone the repository and create a build directory:
+#### Quick Build
+
+1. Clone the repository and build:
 
 ```bash
 git clone https://github.com/ravikt/astratag.git
@@ -38,13 +39,26 @@ cmake ..
 make -j$(nproc)
 ```
 
+If OpenCV is installed in a custom location, pass the path at configure time:
+
+```bash
+cmake -DOpenCV_DIR=/path/to/opencv/lib/cmake/opencv4 ..
+```
+
+To embed dictionary and keypoints data into the library (no external data files needed at runtime):
+
+```bash
+cmake -DASTRATAG_EMBED_DATA=ON ..
+```
+
+2. Run the detector on the example images:
+
 ```bash
 # from project root
 ./build/astratag_detect
-
-# or from build/
-./astratag_detect
 ```
+
+Results are saved to the `results/` folder with detected markers annotated with bounding boxes and 3D pose cubes.
 
 #### Citation
 

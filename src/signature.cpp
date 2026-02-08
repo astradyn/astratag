@@ -50,27 +50,18 @@ std::vector<std::vector<cv::Point2f>> load_keypoints_from_string(const std::stri
     std::string line;
     
     while (std::getline(stream, line)) {
-        std::istringstream line_stream(line);
-        std::string token;
-        std::vector<float> values;
-        
-        // Parse comma-separated values
-        while (std::getline(line_stream, token, ',')) {
-            try {
-                values.push_back(std::stof(token));
-            } catch (...) {
-                // Skip non-numeric tokens (like "triangle_0")
-            }
+        std::istringstream iss(line);
+        float x1, y1, x2, y2, x3, y3, cx, cy;
+
+        if (!(iss >> x1 >> y1 >> x2 >> y2 >> x3 >> y3 >> cx >> cy)) {
+            continue;
         }
-        
-        // Extract the 6 coordinates: x1, y1, x2, y2, x3, y3
-        if (values.size() >= 6) {
-            std::vector<cv::Point2f> triangle;
-            triangle.push_back(cv::Point2f(values[0] * scale, values[1] * scale));
-            triangle.push_back(cv::Point2f(values[2] * scale, values[3] * scale));
-            triangle.push_back(cv::Point2f(values[4] * scale, values[5] * scale));
-            triangles.push_back(triangle);
-        }
+
+        std::vector<cv::Point2f> triangle;
+        triangle.push_back(cv::Point2f(x1 * scale, y1 * scale));
+        triangle.push_back(cv::Point2f(x2 * scale, y2 * scale));
+        triangle.push_back(cv::Point2f(x3 * scale, y3 * scale));
+        triangles.push_back(triangle);
     }
     
     return triangles;
@@ -86,8 +77,12 @@ std::vector<std::vector<cv::Point2f>> load_embedded_keypoints(float scale) {
 }
 
 std::string get_id(const cv::Mat& binary_image, const std::string& keypoints_file) {
-    // Load keypoints from file
+#ifdef ASTRATAG_USE_EMBEDDED_DATA
+    (void)keypoints_file;
+    std::vector<std::vector<cv::Point2f>> triangles = load_embedded_keypoints(1.0);
+#else
     std::vector<std::vector<cv::Point2f>> triangles = load_keypoints(keypoints_file, 1.0);
+#endif
     
     std::string signature;
     signature.reserve(triangles.size()); // Pre-allocate space
