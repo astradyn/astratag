@@ -1,5 +1,5 @@
 # AstraTag
-#### Multi-Range Fiducial Marker for Spacecraft Rendezvous, Proximity Operations and Docking
+#### Multi-Range Fiducial Marker for Autonomous On-Orbit Robotics
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.18524681.svg)](https://doi.org/10.5281/zenodo.18524681)
 
@@ -52,7 +52,7 @@ If you use AstraTag in your work, please cite it:
 
 ```bibtex
 @software{astratag,
-  title = {AstraTag: Multi-Range Fiducial Marker for Spacecraft RPOD},
+  title = {AstraTag: Multi-Range Fiducial Marker for Autonomous On-Orbit Robotics},
   author = {Astradyn Systems LLP},
   year = {2026},
   url = {https://github.com/astradyn/astratag},
