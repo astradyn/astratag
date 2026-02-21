@@ -7,18 +7,20 @@
 #include <iostream>
 #include <filesystem>
 #include <chrono>
+#include <opencv2/calib3d.hpp>
 
 namespace fs = std::filesystem;
 using namespace astratag;
 
 int main(int argc, char** argv) {
     try {
-        // Configuration
-        const std::string test_folder = "examples/astratag_data";
-        const std::string output_folder = "results";
-        const std::string dict_path = "data/new_dictionary.json";
-        const std::string intrinsics_path = "config/camera_example.json";
-        const int allowed_misses = 5;  // Hamming distance threshold (matching Python)
+        // Configuration — accept optional CLI overrides:
+        //   detect_tags <image_folder> [dict_path] [intrinsics_path]
+        const std::string test_folder      = (argc > 1) ? argv[1] : "examples/astratag_data";
+        const std::string dict_path        = (argc > 2) ? argv[2] : "data/new_dictionary.json";
+        const std::string intrinsics_path  = (argc > 3) ? argv[3] : "config/camera_example.json";
+        const std::string output_folder    = (argc > 4) ? argv[4] : "results";
+        const int allowed_misses = 10;  // Hamming distance threshold
         
         // Create output directory
         fs::create_directories(output_folder);
@@ -87,8 +89,40 @@ int main(int argc, char** argv) {
                 std::cout << "  Status: MISSED (" << process_time << " seconds)" << std::endl;
                 missed_detections++;
             } else {
-                std::cout << "  Status: DETECTED " << result.count << " marker(s) (" 
+                std::cout << "  Status: DETECTED " << result.count << " marker(s) ("
                          << process_time << " seconds)" << std::endl;
+
+                // Pose estimation + reprojection error
+                if (!result.corners.empty() && !result.world_locs.empty()) {
+                    cv::Mat rvec, tvec;
+                    bool pose_ok = cv::solvePnP(
+                        result.world_locs[0], result.corners[0],
+                        camera_intrinsics.camera_matrix,
+                        camera_intrinsics.dist_coeffs,
+                        rvec, tvec,
+                        false, cv::SOLVEPNP_IPPE);
+                    if (pose_ok) {
+                        std::vector<cv::Point2f> projected;
+                        cv::projectPoints(result.world_locs[0], rvec, tvec,
+                                          camera_intrinsics.camera_matrix,
+                                          camera_intrinsics.dist_coeffs, projected);
+                        double reproj = 0.0;
+                        for (size_t k = 0; k < result.corners[0].size(); k++) {
+                            double dx = projected[k].x - result.corners[0][k].x;
+                            double dy = projected[k].y - result.corners[0][k].y;
+                            reproj += std::sqrt(dx*dx + dy*dy);
+                        }
+                        reproj /= result.corners[0].size();
+                        std::cout << "  Pose:"
+                                  << " tx=" << tvec.at<double>(0)
+                                  << " ty=" << tvec.at<double>(1)
+                                  << " tz=" << tvec.at<double>(2)
+                                  << " rx=" << rvec.at<double>(0)
+                                  << " ry=" << rvec.at<double>(1)
+                                  << " rz=" << rvec.at<double>(2)
+                                  << " reproj=" << reproj << std::endl;
+                    }
+                }
             }
             
             // Visualize results

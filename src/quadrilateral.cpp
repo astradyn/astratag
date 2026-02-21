@@ -78,7 +78,7 @@ std::vector<std::vector<cv::Point>> QuadrilateralDetector::findContours(const cv
 std::vector<cv::Vec4i> QuadrilateralDetector::detectLines(const cv::Mat& contourImg)
 {
 	std::vector<cv::Vec4i> lines;
-	cv::HoughLinesP(contourImg, lines, 1, CV_PI/180, 20, 10, 5);
+	cv::HoughLinesP(contourImg, lines, 1, CV_PI/180, 15, 5, 10);
 	return lines;
 }
 
@@ -87,7 +87,7 @@ std::vector<CartesianLine> QuadrilateralDetector::convertLinesToCartesian(const 
 	std::vector<CartesianLine> cartesianLines;
 
 	// Consider upto eight lines
-	size_t maxLines = std::min(lines.size(), size_t(8));
+	size_t maxLines = std::min(lines.size(), size_t(16));
         
 	for (size_t i = 0; i < maxLines; ++i)
 	{
@@ -115,7 +115,7 @@ std::vector<std::pair<int,int>> QuadrilateralDetector::findParallelPairs(const s
 
 			double angleDiff = std::abs(angle1 - angle2);
 
-			if (angleDiff < 0.1 || std::abs(angleDiff - CV_PI) < 0.1)
+			if (angleDiff < 0.3 || std::abs(angleDiff - CV_PI) < 0.3)
 			{
 				parallelPairs.emplace_back(i,j);
 			}
@@ -165,38 +165,47 @@ std::vector<std::vector<cv::Point2f>> QuadrilateralDetector::detectQuadrilateral
 	auto contours = findContours(binary);
 	std::vector<std::vector<cv::Point2f>> detectedQuadrilaterals;
 
+	// Diagnostic counters
+	int cnt_total = contours.size();
+	int cnt_area = 0, cnt_lines = 0, cnt_parallel = 0, cnt_quad = 0, cnt_aspect = 0, cnt_passed = 0;
+
 	for (const auto& contour : contours)
 	{
 		if (cv::contourArea(contour) < 20)
 		{
 			continue;
 		}
+		cnt_area++;
 
 		cv::Mat contourImg = cv::Mat::zeros(binary.size(), binary.type());
 		cv::drawContours(contourImg, std::vector<std::vector<cv::Point>>{contour}, -1, 255, 1);
 
 		auto lines = detectLines(contourImg);
 
-		if (!lines.empty() && lines.size() >= 4) 
+		if (!lines.empty() && lines.size() >= 4)
 		{
+			cnt_lines++;
 			auto cartesianLines = convertLinesToCartesian(lines);
 			auto parallelPairs  = findParallelPairs(cartesianLines);
 
-			if (parallelPairs.size() >= 2)
+			if (parallelPairs.size() >= 1)
 			{
+				cnt_parallel++;
 				double epsilon = 0.09 * cv::arcLength(contour, true);
 				std::vector<cv::Point> approx;
 				cv::approxPolyDP(contour, approx, epsilon, true);
 
 				if (approx.size() == 4)
 				{
+					cnt_quad++;
 					cv::RotatedRect rect = cv::minAreaRect(approx);
 					float width  = rect.size.width;
 					float height = rect.size.height;
 					float aspectRatio = std::max(width, height) / std::min(width, height);
 
-					if (aspectRatio > 0.5 && aspectRatio < 2.0)
+					if (aspectRatio >= 1.0 && aspectRatio < 5.0)
 					{
+						cnt_aspect++;
 						std::vector<cv::Point2f> corners(approx.begin(), approx.end());
 						std::vector<cv::Point2f> refinedCorners;
 						cv::Mat gray;
@@ -206,20 +215,28 @@ std::vector<std::vector<cv::Point2f>> QuadrilateralDetector::detectQuadrilateral
 
                                                 try
 						{
-							auto orderedCorners = orderContour(corners); 
+							auto orderedCorners = orderContour(corners);
 							detectedQuadrilaterals.push_back(orderedCorners);
+							cnt_passed++;
 						}
 						catch (const std::invalid_argument& e)
 						{
 							// Use original corners if ordering fails
 							detectedQuadrilaterals.push_back(corners);
+							cnt_passed++;
 						}
-					
+
 					}
 				}
 			}
 		}
 	}
+
+	std::cout << "Pipeline: " << cnt_total << " contours -> "
+		  << cnt_area << " area -> " << cnt_lines << " lines -> "
+		  << cnt_parallel << " parallel -> " << cnt_quad << " quad -> "
+		  << cnt_aspect << " aspect -> " << cnt_passed << " passed" << std::endl;
+
 	return detectedQuadrilaterals;
 }
 

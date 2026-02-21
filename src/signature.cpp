@@ -76,12 +76,12 @@ std::vector<std::vector<cv::Point2f>> load_embedded_keypoints(float scale) {
 #endif
 }
 
-std::string get_id(const cv::Mat& binary_image, const std::string& keypoints_file) {
+std::string get_id(const cv::Mat& binary_image, const std::string& keypoints_file, float scale) {
 #ifdef ASTRATAG_USE_EMBEDDED_DATA
     (void)keypoints_file;
-    std::vector<std::vector<cv::Point2f>> triangles = load_embedded_keypoints(1.0);
+    std::vector<std::vector<cv::Point2f>> triangles = load_embedded_keypoints(scale);
 #else
-    std::vector<std::vector<cv::Point2f>> triangles = load_keypoints(keypoints_file, 1.0);
+    std::vector<std::vector<cv::Point2f>> triangles = load_keypoints(keypoints_file, scale);
 #endif
     
     std::string signature;
@@ -116,14 +116,14 @@ int hamming_distance(const std::string& sig1, const std::string& sig2) {
     if (sig1.length() != sig2.length()) {
         throw std::invalid_argument("Signature strings must have equal length");
     }
-    
+
     int distance = 0;
     for (size_t i = 0; i < sig1.length(); ++i) {
         if (sig1[i] != sig2[i]) {
             distance++;
         }
     }
-    
+
     return distance;
 }
 

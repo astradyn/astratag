@@ -20,7 +20,7 @@ namespace astratag {
  * @param keypoints_file Path to keypoints file (default: "keypoints.txt")
  * @return std::string Binary signature as string of '0' and '1' characters
  */
-std::string get_id(const cv::Mat& binary_image, const std::string& keypoints_file = "keypoints.txt");
+std::string get_id(const cv::Mat& binary_image, const std::string& keypoints_file = "keypoints.txt", float scale = 1.0f);
 
 /**
  * @brief Calculate Hamming distance between two binary signature strings
